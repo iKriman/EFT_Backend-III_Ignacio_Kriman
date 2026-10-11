@@ -2,7 +2,7 @@
 
 # Repositorio GitHub
 
-https://github.com/iKriman/backend_iii
+https://github.com/iKriman/EFT_Backend-III_Ignacio_Kriman
 
 Proyecto de modernización del sistema legacy del Banco XYZ hacia una arquitectura de microservicios con Spring Boot, Spring Cloud, Spring Batch, OAuth2, Resilience4j, Apache Kafka y Docker Compose.
 
