@@ -1,0 +1,10 @@
+package cl.bancoxyz.customer;
+import jakarta.validation.Valid;import jakarta.validation.constraints.*;import java.util.*;import java.util.concurrent.*;import java.util.concurrent.atomic.AtomicLong;import org.springframework.http.*;import org.springframework.web.bind.annotation.*;
+@RestController @RequestMapping("/api/customers") public class CustomerController {private final Map<Long,Customer> data=new ConcurrentHashMap<>();private final AtomicLong ids=new AtomicLong(10);public CustomerController(){data.put(1L,new Customer(1L,"Ana Perez","ana@xyz.cl","LOW","ACTIVE"));data.put(2L,new Customer(2L,"Luis Soto","luis@xyz.cl","MEDIUM","ACTIVE"));}
+@GetMapping public List<Customer> all(){return data.values().stream().sorted(Comparator.comparing(Customer::id)).toList();}
+@GetMapping("/{id}") public ResponseEntity<Customer> get(@PathVariable long id){Customer c=data.get(id);return c==null?ResponseEntity.notFound().build():ResponseEntity.ok(c);}
+@GetMapping("/{id}/risk") public ResponseEntity<Map<String,String>> risk(@PathVariable long id){Customer c=data.get(id);return c==null?ResponseEntity.notFound().build():ResponseEntity.ok(Map.of("riskLevel",c.riskLevel()));}
+@PostMapping public ResponseEntity<Customer> create(@Valid @RequestBody CustomerRequest r){long id=ids.incrementAndGet();Customer c=new Customer(id,r.name(),r.email(),"LOW","ACTIVE");data.put(id,c);return ResponseEntity.status(HttpStatus.CREATED).body(c);}
+@PutMapping("/{id}") public ResponseEntity<Customer> update(@PathVariable long id,@Valid @RequestBody CustomerRequest r){Customer old=data.get(id);if(old==null)return ResponseEntity.notFound().build();Customer c=new Customer(id,r.name(),r.email(),old.riskLevel(),old.status());data.put(id,c);return ResponseEntity.ok(c);}
+public record CustomerRequest(@NotBlank String name,@Email @NotBlank String email){}
+}

@@ -1,0 +1,1 @@
+package cl.bancoxyz.notification;import java.util.*;import org.springframework.web.bind.annotation.*;@RestController @RequestMapping("/api/notifications") public class NotificationController{private final NotificationStore store;public NotificationController(NotificationStore s){store=s;}@GetMapping public List<String> all(){return store.all();}}

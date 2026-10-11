@@ -1,0 +1,124 @@
+name: banco-xyz-final
+x-java: &java
+  restart: unless-stopped
+  networks: [bank]
+  environment: &common-env
+    JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75.0
+    CONFIG_SERVER_URL: http://config-server:8888
+    EUREKA_URL: http://discovery-server:8761/eureka/
+    OAUTH_ISSUER: http://auth-server:9000
+    OAUTH_JWKS_URI: http://auth-server:9000/oauth2/jwks
+    KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+services:
+  config-server:
+    <<: *java
+    build: {context: ., args: {MODULE: config-server}}
+    image: banco-xyz/config-server:final
+    environment:
+      JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75.0
+      SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS: file:/config-repo/
+    volumes: [./config-repo:/config-repo:ro]
+    ports: ["8888:8888"]
+
+  discovery-server:
+    <<: *java
+    build: {context: ., args: {MODULE: discovery-server}}
+    image: banco-xyz/discovery-server:final
+    environment: {JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75.0}
+    ports: ["8761:8761"]
+
+  auth-server:
+    <<: *java
+    build: {context: ., args: {MODULE: auth-server}}
+    image: banco-xyz/auth-server:final
+    environment:
+      JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75.0
+      API_CLIENT_SECRET: ${API_CLIENT_SECRET:-api-secret-demo}
+      ATM_CLIENT_SECRET: ${ATM_CLIENT_SECRET:-atm-secret-demo}
+      OAUTH_ISSUER: http://auth-server:9000
+    ports: ["9000:9000"]
+
+  kafka:
+    image: apache/kafka:3.8.1
+    restart: unless-stopped
+    networks: [bank]
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
+
+  account-service:
+    <<: *java
+    build: {context: ., args: {MODULE: account-service}}
+    image: banco-xyz/account-service:final
+    environment: {<<: *common-env}
+    depends_on: [config-server, discovery-server, auth-server, kafka]
+
+  payment-service:
+    <<: *java
+    build: {context: ., args: {MODULE: payment-service}}
+    image: banco-xyz/payment-service:final
+    environment:
+      <<: *common-env
+      FORCE_RISK_FAILURE: ${FORCE_RISK_FAILURE:-false}
+    depends_on: [config-server, discovery-server, auth-server, kafka, customer-service]
+
+  customer-service:
+    <<: *java
+    build: {context: ., args: {MODULE: customer-service}}
+    image: banco-xyz/customer-service:final
+    environment: {<<: *common-env}
+    depends_on: [config-server, discovery-server, auth-server]
+
+  notification-service:
+    <<: *java
+    build: {context: ., args: {MODULE: notification-service}}
+    image: banco-xyz/notification-service:final
+    environment: {<<: *common-env}
+    depends_on: [kafka, discovery-server, auth-server]
+    ports: ["8084:8084"]
+
+  batch-service:
+    <<: *java
+    build: {context: ., args: {MODULE: batch-service}}
+    image: banco-xyz/batch-service:final
+    environment: {<<: *common-env}
+    volumes: [./output:/app/output]
+    depends_on: [config-server, discovery-server, auth-server]
+    ports: ["8085:8085"]
+
+  bff-web:
+    <<: *java
+    build: {context: ., args: {MODULE: bff-web}}
+    image: banco-xyz/bff-web:final
+    environment: {<<: *common-env}
+    depends_on: [account-service, payment-service, customer-service]
+    ports: ["8091:8091"]
+
+  bff-mobile:
+    <<: *java
+    build: {context: ., args: {MODULE: bff-mobile}}
+    image: banco-xyz/bff-mobile:final
+    environment: {<<: *common-env}
+    depends_on: [account-service]
+    ports: ["8092:8092"]
+
+  bff-atm:
+    <<: *java
+    build: {context: ., args: {MODULE: bff-atm}}
+    image: banco-xyz/bff-atm:final
+    environment: {<<: *common-env}
+    depends_on: [account-service, payment-service]
+    ports: ["8093:8093"]
+networks:
+  bank:
+    driver: bridge

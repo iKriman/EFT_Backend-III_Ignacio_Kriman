@@ -1,0 +1,1 @@
+package cl.bancoxyz.batch.model;import java.math.BigDecimal;import java.time.LocalDate;public record DailyTransaction(Long id,LocalDate date,BigDecimal amount,String type){}

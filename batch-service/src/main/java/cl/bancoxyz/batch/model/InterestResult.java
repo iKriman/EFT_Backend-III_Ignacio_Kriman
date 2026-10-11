@@ -1,0 +1,1 @@
+package cl.bancoxyz.batch.model;import java.math.BigDecimal;public record InterestResult(Long accountId,String name,BigDecimal originalBalance,BigDecimal monthlyInterest,BigDecimal finalBalance,String type){}

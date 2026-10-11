@@ -1,0 +1,423 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261005015458
+Username: DESKTOP-I3VM8RC\ignac
+RunAs User: DESKTOP-I3VM8RC\ignac
+Configuration Name: 
+Machine: DESKTOP-I3VM8RC (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File .\scripts\probar.ps1 -ProbarResiliencia -ProbarCola
+Process ID: 32680
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+
+GET http://localhost:8888/actuator/health -> 200 (esperado 200)
+{
+    "status":  "UP"
+}
+GET http://localhost:8761/actuator/health -> 200 (esperado 200)
+{
+    "status":  "UP"
+}
+GET http://localhost:9000/actuator/health -> 200 (esperado 200)
+{
+    "status":  "UP"
+}
+GET http://localhost:8081/actuator/health -> 200 (esperado 200)
+{
+    "status":  "UP"
+}
+GET http://localhost:8082/actuator/health -> 200 (esperado 200)
+{
+    "status":  "UP"
+}
+OAuth2: tokens emitidos para API y ATM (se omiten los secretos del registro).
+GET http://localhost:8081/api/accounts/106 -> 401 (esperado 401)
+GET http://localhost:8081/api/accounts/106 -> 401 (esperado 401)
+GET http://localhost:8081/api/accounts/106 -> 403 (esperado 403)
+GET http://localhost:8081/api/atm/cuentas/106/saldo -> 403 (esperado 403)
+GET http://localhost:8081/api/accounts/106 -> 200 (esperado 200)
+{
+    "cuenta":  {
+                   "cuentaId":  106,
+                   "nombre":  "Jane Smith",
+                   "saldo":  12000,
+                   "edad":  40,
+                   "tipo":  "prestamo"
+               },
+    "saldoDisponible":  12000,
+    "ultimosMovimientos":  [
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-12-16",
+                                   "transaccion":  "deposito",
+                                   "monto":  2500,
+                                   "descripcion":  "Movimiento sin descripcion"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-12-07",
+                                   "transaccion":  "retiro",
+                                   "monto":  2500,
+                                   "descripcion":  "Ingreso navide├▒o"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-12-04",
+                                   "transaccion":  "retiro",
+                                   "monto":  2000,
+                                   "descripcion":  "Ingreso extra"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-11-26",
+                                   "transaccion":  "pago",
+                                   "monto":  1500,
+                                   "descripcion":  "Retiro parcial"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-11-22",
+                                   "transaccion":  "deposito",
+                                   "monto":  2500,
+                                   "descripcion":  "Compra en tienda"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-10-28",
+                                   "transaccion":  "retiro",
+                                   "monto":  2500,
+                                   "descripcion":  "Ingreso navide├▒o"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-10-19",
+                                   "transaccion":  "retiro",
+                                   "monto":  1500,
+                                   "descripcion":  "Movimiento sin descripcion"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-10-12",
+                                   "transaccion":  "compra",
+                                   "monto":  1500,
+                                   "descripcion":  "Ingreso navide├▒o"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-10-02",
+                                   "transaccion":  "retiro",
+                                   "monto":  1500,
+                                   "descripcion":  "Compra en tienda"
+                               },
+                               {
+                                   "cuentaId":  106,
+                                   "fecha":  "2024-09-15",
+                                   "transaccion":  "deposito",
+                                   "monto":  2000,
+                                   "descripcion":  "Movimiento sin descripcion"
+                               }
+                           ]
+}
+GET http://localhost:8081/api/atm/cuentas/106/saldo -> 200 (esperado 200)
+{
+    "canal":  "atm",
+    "cuentaId":  106,
+    "saldoDisponible":  12000
+}
+GET http://localhost:8081/api/accounts/106/migration-report -> 200 (esperado 200)
+{
+    "origen":  "legacy-audit-service",
+    "cuentaId":  106,
+    "estado":  "VALIDATED",
+    "cuentasMigradas":  50,
+    "transaccionesMigradas":  401,
+    "movimientosMigrados":  686,
+    "calidadDatos":  [
+                         {
+                             "archivo":  "transacciones.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  401,
+                             "registrosOmitidos":  599
+                         },
+                         {
+                             "archivo":  "intereses.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  50,
+                             "registrosOmitidos":  950
+                         },
+                         {
+                             "archivo":  "cuentas_anuales.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  686,
+                             "registrosOmitidos":  314
+                         }
+                     ],
+    "generadoEn":  "2026-10-05T04:55:03.60987494"
+}
+GET http://localhost:8082/api/notifications -> 401 (esperado 401)
+GET http://localhost:8082/api/notifications -> 403 (esperado 403)
+POST http://localhost:8081/api/events/migration/106 -> 202 (esperado 202)
+{
+    "eventId":  "1ab314c2-b3b9-4dc9-b210-2ead8b5381f4",
+    "type":  "MIGRATION_REVIEW_REQUESTED",
+    "accountId":  106,
+    "occurredAt":  "2026-10-05T04:55:04.413098246Z"
+}
+{
+    "eventId":  "1ab314c2-b3b9-4dc9-b210-2ead8b5381f4",
+    "type":  "MIGRATION_REVIEW_REQUESTED",
+    "accountId":  106,
+    "occurredAt":  "2026-10-05T04:55:04.413098246Z"
+}
+
+POST http://localhost:8081/api/events/migration/106 -> 202 (esperado 202)
+Evento encolado con consumidor detenido: 34fcfdb9-a7f2-43d3-87dd-60aab9df1a6c
+
+{
+    "eventId":  "34fcfdb9-a7f2-43d3-87dd-60aab9df1a6c",
+    "type":  "MIGRATION_REVIEW_REQUESTED",
+    "accountId":  106,
+    "occurredAt":  "2026-10-05T04:55:10.972972833Z"
+}
+
+PS>TerminatingError(Invoke-RestMethod): "The underlying connection was closed: The connection was closed unexpectedly."
+PS>TerminatingError(Invoke-RestMethod): "The underlying connection was closed: The connection was closed unexpectedly."
+PS>TerminatingError(Invoke-RestMethod): "The underlying connection was closed: The connection was closed unexpectedly."
+GET http://localhost:8081/api/accounts/106/migration-report -> 200 (esperado 200)
+{
+    "origen":  "fallback-local-cache",
+    "cuentaId":  106,
+    "estado":  "VALIDATED_WITH_FALLBACK",
+    "cuentasMigradas":  50,
+    "transaccionesMigradas":  401,
+    "movimientosMigrados":  686,
+    "calidadDatos":  [
+                         {
+                             "archivo":  "transacciones.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  401,
+                             "registrosOmitidos":  599
+                         },
+                         {
+                             "archivo":  "intereses.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  50,
+                             "registrosOmitidos":  950
+                         },
+                         {
+                             "archivo":  "cuentas_anuales.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  686,
+                             "registrosOmitidos":  314
+                         }
+                     ],
+    "generadoEn":  "2026-10-05T04:55:47.400489956"
+}
+GET http://localhost:8081/api/accounts/106/migration-report -> 200 (esperado 200)
+{
+    "origen":  "fallback-local-cache",
+    "cuentaId":  106,
+    "estado":  "VALIDATED_WITH_FALLBACK",
+    "cuentasMigradas":  50,
+    "transaccionesMigradas":  401,
+    "movimientosMigrados":  686,
+    "calidadDatos":  [
+                         {
+                             "archivo":  "transacciones.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  401,
+                             "registrosOmitidos":  599
+                         },
+                         {
+                             "archivo":  "intereses.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  50,
+                             "registrosOmitidos":  950
+                         },
+                         {
+                             "archivo":  "cuentas_anuales.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  686,
+                             "registrosOmitidos":  314
+                         }
+                     ],
+    "generadoEn":  "2026-10-05T04:55:47.769680344"
+}
+GET http://localhost:8081/api/accounts/106/migration-report -> 200 (esperado 200)
+{
+    "origen":  "fallback-local-cache",
+    "cuentaId":  106,
+    "estado":  "VALIDATED_WITH_FALLBACK",
+    "cuentasMigradas":  50,
+    "transaccionesMigradas":  401,
+    "movimientosMigrados":  686,
+    "calidadDatos":  [
+                         {
+                             "archivo":  "transacciones.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  401,
+                             "registrosOmitidos":  599
+                         },
+                         {
+                             "archivo":  "intereses.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  50,
+                             "registrosOmitidos":  950
+                         },
+                         {
+                             "archivo":  "cuentas_anuales.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  686,
+                             "registrosOmitidos":  314
+                         }
+                     ],
+    "generadoEn":  "2026-10-05T04:55:48.01526337"
+}
+GET http://localhost:8081/api/accounts/106/migration-report -> 200 (esperado 200)
+{
+    "origen":  "fallback-local-cache",
+    "cuentaId":  106,
+    "estado":  "VALIDATED_WITH_FALLBACK",
+    "cuentasMigradas":  50,
+    "transaccionesMigradas":  401,
+    "movimientosMigrados":  686,
+    "calidadDatos":  [
+                         {
+                             "archivo":  "transacciones.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  401,
+                             "registrosOmitidos":  599
+                         },
+                         {
+                             "archivo":  "intereses.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  50,
+                             "registrosOmitidos":  950
+                         },
+                         {
+                             "archivo":  "cuentas_anuales.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  686,
+                             "registrosOmitidos":  314
+                         }
+                     ],
+    "generadoEn":  "2026-10-05T04:55:48.254958057"
+}
+GET http://localhost:8081/actuator/circuitbreakers -> 200 (esperado 200)
+{
+    "circuitBreakers":  {
+                            "legacyAudit":  {
+                                                "failureRate":  "100.0%",
+                                                "slowCallRate":  "0.0%",
+                                                "failureRateThreshold":  "50.0%",
+                                                "slowCallRateThreshold":  "100.0%",
+                                                "bufferedCalls":  2,
+                                                "failedCalls":  2,
+                                                "slowCalls":  0,
+                                                "slowFailedCalls":  0,
+                                                "notPermittedCalls":  2,
+                                                "state":  "OPEN"
+                                            }
+                        }
+}
+GET http://localhost:8081/actuator/circuitbreakerevents -> 200 (esperado 200)
+{
+    "circuitBreakerEvents":  [
+                                 {
+                                     "circuitBreakerName":  "legacyAudit",
+                                     "type":  "ERROR",
+                                     "creationTime":  "2026-10-05T04:55:47.397285638Z[Etc/UTC]",
+                                     "errorMessage":  "java.lang.IllegalStateException: Legacy audit endpoint unavailable",
+                                     "durationInMs":  111,
+                                     "stateTransition":  null
+                                 },
+                                 {
+                                     "circuitBreakerName":  "legacyAudit",
+                                     "type":  "ERROR",
+                                     "creationTime":  "2026-10-05T04:55:47.764183248Z[Etc/UTC]",
+                                     "errorMessage":  "java.lang.IllegalStateException: Legacy audit endpoint unavailable",
+                                     "durationInMs":  106,
+                                     "stateTransition":  null
+                                 },
+                                 {
+                                     "circuitBreakerName":  "legacyAudit",
+                                     "type":  "FAILURE_RATE_EXCEEDED",
+                                     "creationTime":  "2026-10-05T04:55:47.765324190Z[Etc/UTC]",
+                                     "errorMessage":  null,
+                                     "durationInMs":  null,
+                                     "stateTransition":  null
+                                 },
+                                 {
+                                     "circuitBreakerName":  "legacyAudit",
+                                     "type":  "STATE_TRANSITION",
+                                     "creationTime":  "2026-10-05T04:55:47.769493365Z[Etc/UTC]",
+                                     "errorMessage":  null,
+                                     "durationInMs":  null,
+                                     "stateTransition":  "CLOSED_TO_OPEN"
+                                 },
+                                 {
+                                     "circuitBreakerName":  "legacyAudit",
+                                     "type":  "NOT_PERMITTED",
+                                     "creationTime":  "2026-10-05T04:55:48.015146574Z[Etc/UTC]",
+                                     "errorMessage":  null,
+                                     "durationInMs":  null,
+                                     "stateTransition":  null
+                                 },
+                                 {
+                                     "circuitBreakerName":  "legacyAudit",
+                                     "type":  "NOT_PERMITTED",
+                                     "creationTime":  "2026-10-05T04:55:48.254887246Z[Etc/UTC]",
+                                     "errorMessage":  null,
+                                     "durationInMs":  null,
+                                     "stateTransition":  null
+                                 }
+                             ]
+}
+
+PS>TerminatingError(Invoke-RestMethod): "The underlying connection was closed: The connection was closed unexpectedly."
+PS>TerminatingError(Invoke-RestMethod): "The underlying connection was closed: The connection was closed unexpectedly."
+PS>TerminatingError(Invoke-RestMethod): "The underlying connection was closed: The connection was closed unexpectedly."
+PS>TerminatingError(Invoke-RestMethod): "The underlying connection was closed: The connection was closed unexpectedly."
+GET http://localhost:8081/api/accounts/106/migration-report -> 200 (esperado 200)
+{
+    "origen":  "legacy-audit-service",
+    "cuentaId":  106,
+    "estado":  "VALIDATED",
+    "cuentasMigradas":  50,
+    "transaccionesMigradas":  401,
+    "movimientosMigrados":  686,
+    "calidadDatos":  [
+                         {
+                             "archivo":  "transacciones.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  401,
+                             "registrosOmitidos":  599
+                         },
+                         {
+                             "archivo":  "intereses.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  50,
+                             "registrosOmitidos":  950
+                         },
+                         {
+                             "archivo":  "cuentas_anuales.csv",
+                             "registrosLeidos":  1000,
+                             "registrosValidos":  686,
+                             "registrosOmitidos":  314
+                         }
+                     ],
+    "generadoEn":  "2026-10-05T04:56:05.943019148"
+}
+
+PRUEBAS COMPLETADAS
+**********************
+Windows PowerShell transcript end
+End time: 20261005015606
+**********************

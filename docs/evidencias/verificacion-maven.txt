@@ -1,0 +1,16 @@
+Salida real de Maven package, extracto de resultados. Java 17.
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.88 s -- in cl.bancoxyz.bff.BffSecurityTests
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.77 s -- in cl.bancoxyz.auth.OAuthFlowTests
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.199 s -- in cl.bancoxyz.notification.NotificationStoreTests
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] bank-cloud-platform ................................ SUCCESS [  0.002 s]
+[INFO] config-server ...................................... SUCCESS [  0.944 s]
+[INFO] discovery-server ................................... SUCCESS [  0.193 s]
+[INFO] bank-account-service ............................... SUCCESS [ 16.707 s]
+[INFO] auth-server ........................................ SUCCESS [ 14.919 s]
+[INFO] notification-service ............................... SUCCESS [  1.197 s]
+[INFO] BUILD SUCCESS
+[INFO] Total time:  34.243 s
+[INFO] Finished at: 2026-10-04T16:22:18-04:00

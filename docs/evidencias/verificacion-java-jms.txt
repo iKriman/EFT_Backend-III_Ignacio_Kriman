@@ -1,0 +1,32 @@
+Verificacion real de procesos Java y Artemis, sin Docker. 2026-10-04 16:23:42 -0400
+SALUD 8888: {"status": "UP"}
+SALUD 8761: {"status": "UP"}
+SALUD 9000: {"status": "UP"}
+SALUD 8081: {"status": "UP"}
+SALUD 8082: {"status": "UP"}
+CONFIG SERVER: propiedades recuperadas
+OAUTH2: tokens firmados emitidos para API y ATM; tokens omitidos
+OAUTH2 secreto incorrecto -> 401
+OAUTH2 elevacion de scope rechazada -> 400
+8081/api/accounts/106 -> 401
+8081/api/accounts/106 -> 401
+8081/api/accounts/106 -> 403
+8081/api/atm/cuentas/106/saldo -> 403
+8082/api/notifications -> 401
+8082/api/notifications -> 403
+CUENTA 106 -> 200 {"cuenta": {"cuentaId": 106, "nombre": "Jane Smith", "saldo": 12000, "edad": 40, "tipo": "prestamo"}, "saldoDisponible": 12000, "ultimosMovimientos": [{"cuentaId": 106, "fecha": "2024-12-16", "transaccion": "deposito", "monto": 2500, "descripcion": "Movimiento sin descripcion"}, {"cuentaId": 106, "fecha": "2024-12-07", "transaccion": "retiro", "monto": 2500, "descripcion": "Ingreso navideño"}, {"cuentaId": 106, "fecha": "2024-12-04", "transaccion": "retiro", "monto": 2000, "descripcion": "Ingreso extra"}, {"cuentaId": 106, "fecha": "2024-11-26", "transaccion": "pago", "monto": 1500, "descripcion": "Retiro parcial"}, {"cuentaId": 106, "fecha": "2024-11-22", "transaccion": "deposito", "monto": 2500, "descripcion": "Compra en tienda"}, {"cuentaId": 106, "fecha": "2024-10-28", "transaccion": "retiro", "monto": 2500, "descripcion": "Ingreso navideño"}, {"cuentaId": 106, "fecha": "2024-10-19", "transaccion": "retiro", "monto": 1500, "descripcion": "Movimiento sin descripcion"}, {"cuentaId": 106, "fecha": "2024-10-12", "transaccion": "compra", "monto": 1500, "descripcion": "Ingreso navideño"}, {"cuentaId": 106, "fecha": "2024-10-02", "transaccion": "retiro", "monto": 1500, "descripcion": "Compra en tienda"}, {"cuentaId": 106, "fecha": "2024-09-15", "transaccion": "deposito", "monto": 2000, "descripcion": "Movimiento sin descripcion"}]}
+ATM saldo -> 200
+REPORTE NORMAL {"origen": "legacy-audit-service", "cuentaId": 106, "estado": "VALIDATED", "cuentasMigradas": 50, "transaccionesMigradas": 401, "movimientosMigrados": 686, "calidadDatos": [{"archivo": "transacciones.csv", "registrosLeidos": 1000, "registrosValidos": 401, "registrosOmitidos": 599}, {"archivo": "intereses.csv", "registrosLeidos": 1000, "registrosValidos": 50, "registrosOmitidos": 950}, {"archivo": "cuentas_anuales.csv", "registrosLeidos": 1000, "registrosValidos": 686, "registrosOmitidos": 314}], "generadoEn": "2026-10-04T16:23:59.137737249"}
+JMS PUBLICADO {"eventId": "0c41175a-7e59-4425-9703-bccc1f9df317", "type": "MIGRATION_REVIEW_REQUESTED", "accountId": 106, "occurredAt": "2026-10-04T20:23:59.149399495Z"}
+JMS RECIBIDO 0c41175a-7e59-4425-9703-bccc1f9df317
+JMS CONSUMIDOR DETENIDO, encolado {"eventId": "cfe08b40-2304-4788-b823-9605ac2c26bd", "type": "MIGRATION_REVIEW_REQUESTED", "accountId": 106, "occurredAt": "2026-10-04T20:24:03.662605933Z"}
+SALUD 8082: {"status": "UP"}
+JMS RECIBIDO cfe08b40-2304-4788-b823-9605ac2c26bd
+SALUD 8081: {"status": "UP"}
+FALLBACK {"origen": "fallback-local-cache", "cuentaId": 106, "estado": "VALIDATED_WITH_FALLBACK", "cuentasMigradas": 50, "transaccionesMigradas": 401, "movimientosMigrados": 686, "calidadDatos": [{"archivo": "transacciones.csv", "registrosLeidos": 1000, "registrosValidos": 401, "registrosOmitidos": 599}, {"archivo": "intereses.csv", "registrosLeidos": 1000, "registrosValidos": 50, "registrosOmitidos": 950}, {"archivo": "cuentas_anuales.csv", "registrosLeidos": 1000, "registrosValidos": 686, "registrosOmitidos": 314}], "generadoEn": "2026-10-04T16:24:19.026574999"}
+CIRCUITOS {"circuitBreakers": {"legacyAudit": {"failureRate": "100.0%", "slowCallRate": "0.0%", "failureRateThreshold": "50.0%", "slowCallRateThreshold": "100.0%", "bufferedCalls": 2, "failedCalls": 2, "slowCalls": 0, "slowFailedCalls": 0, "notPermittedCalls": 2, "state": "OPEN"}}}
+EVENTOS CIRCUITO {"circuitBreakerEvents": [{"circuitBreakerName": "legacyAudit", "type": "ERROR", "creationTime": "2026-10-04T16:24:18.872361865-04:00[America/New_York]", "errorMessage": "java.lang.IllegalStateException: Legacy audit endpoint unavailable", "durationInMs": 108, "stateTransition": null}, {"circuitBreakerName": "legacyAudit", "type": "ERROR", "creationTime": "2026-10-04T16:24:18.996459558-04:00[America/New_York]", "errorMessage": "java.lang.IllegalStateException: Legacy audit endpoint unavailable", "durationInMs": 101, "stateTransition": null}, {"circuitBreakerName": "legacyAudit", "type": "FAILURE_RATE_EXCEEDED", "creationTime": "2026-10-04T16:24:18.997393568-04:00[America/New_York]", "errorMessage": null, "durationInMs": null, "stateTransition": null}, {"circuitBreakerName": "legacyAudit", "type": "STATE_TRANSITION", "creationTime": "2026-10-04T16:24:19.001721931-04:00[America/New_York]", "errorMessage": null, "durationInMs": null, "stateTransition": "CLOSED_TO_OPEN"}, {"circuitBreakerName": "legacyAudit", "type": "NOT_PERMITTED", "creationTime": "2026-10-04T16:24:19.011335339-04:00[America/New_York]", "errorMessage": null, "durationInMs": null, "stateTransition": null}, {"circuitBreakerName": "legacyAudit", "type": "NOT_PERMITTED", "creationTime": "2026-10-04T16:24:19.026500156-04:00[America/New_York]", "errorMessage": null, "durationInMs": null, "stateTransition": null}]}
+SALUD 8081: {"status": "UP"}
+RECUPERACION -> VALIDATED
+EUREKA ["BANK-ACCOUNT-SERVICE", "NOTIFICATION-SERVICE"]
+RESULTADO: todas las verificaciones de ejecucion anteriores aprobadas. Docker pendiente de comprobar en el PC del estudiante.
